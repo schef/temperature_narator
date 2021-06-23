@@ -1,5 +1,9 @@
 import logic
 
-print("Starting main loop")
-while True:
-    logic.loop()
+
+if __name__ == "__main__":
+    print("Boot sequence start")
+    logic.init()
+    print("Boot sequence end")
+    while True:
+        logic.loop()
