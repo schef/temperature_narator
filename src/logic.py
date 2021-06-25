@@ -5,8 +5,7 @@ import common
 
 @common.dump_func(showarg=True)
 def on_new_temperature(temperature):
-    sentence = str(temperature)
-    narator.play_sentence(sentence)
+    narator.play_temperature(temperature)
 
 
 def init():
