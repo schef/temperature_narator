@@ -1,10 +1,9 @@
 from kt403A import KT403A
 import common
 
-
 class Sentence:
     def __init__(self, f, duration):
-        self.file = f
+        self.file_index = f
         self.duration = duration
 
 
@@ -150,38 +149,43 @@ temperature_sentence = {
     -13: Sentence(139, 1597),  # ./2013.mp3
     -14: Sentence(140, 1500),  # ./2014.mp3
     -15: Sentence(141, 1636),  # ./2015.mp3
+    9000: Sentence(142, 3792),  # ./9000.mp3
 }
 
 
 speaker = None
 sentence_queue = []
-wait_for_duration_timestamp = common.get_millis()
+play_start_timestamp = 0
+current_sound_duration = 0
 
 
 def is_playing():
-    return speaker.IsPlaying()
+    return common.millis_passed(play_start_timestamp) <= current_sound_duration or speaker.IsPlaying()
 
 
 @common.dump_func(showarg=True)
-def play(index):
-    speaker.PlaySpecific(index)
+def play(sentence):
+    global play_start_timestamp, current_sound_duration
+    play_start_timestamp = common.get_millis()
+    current_sound_duration = sentence.duration
+    speaker.PlaySpecific(sentence.file_index)
 
 
 @common.dump_func(showarg=True)
 def play_temperature(temperature):
     sentence_queue.append(temperature_sentence[temperature])
 
+
+@common.dump_func()
 def init():
     global speaker
     speaker = KT403A(volume=70)
-    
+    play_temperature(9000)
+
 
 def loop():
-    global wait_for_duration_timestamp
-    if len(sentence_queue) > 0 and common.millis_passed(wait_for_duration_timestamp) > sentence_queue[0].duration and not is_playing():
-        wait_for_duration_timestamp = common.get_millis()
-        word = sentence_queue.pop(0)
-        play(word.file)
+    if len(sentence_queue) > 0 and not is_playing():
+        play(sentence_queue.pop(0))
 
 
 def loop_test():

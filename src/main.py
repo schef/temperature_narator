@@ -9,8 +9,8 @@ if __name__ == "__main__":
     print("Boot sequence start")
     led.on()
     sleep(1)
-    logic.init()
     led.off()
+    logic.init()
     print("Boot sequence end")
     while True:
         logic.loop()
