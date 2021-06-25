@@ -9,6 +9,8 @@ def on_new_temperature(temperature):
 
 
 def init():
+    narator.init()
+    temperature.init()
     temperature.register_temperature_callback(on_new_temperature)
     temperature.get_temperature()
 

@@ -153,7 +153,7 @@ temperature_sentence = {
 }
 
 
-speaker = KT403A(volume=70)
+speaker = None
 sentence_queue = []
 wait_for_duration_timestamp = common.get_millis()
 
@@ -171,6 +171,10 @@ def play(index):
 def play_temperature(temperature):
     sentence_queue.append(temperature_sentence[temperature])
 
+def init():
+    global speaker
+    speaker = KT403A(volume=70)
+    
 
 def loop():
     global wait_for_duration_timestamp
